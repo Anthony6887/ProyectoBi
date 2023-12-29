@@ -1,0 +1,24 @@
+<html>
+    <head>
+        <h1>Formulario de Ventas</h1>
+        <link rel="stylesheet" href="../templates/styles.css">
+    </head>
+    <body>
+        <form action='/predict' method="POST">
+            Vecindario: <input type='text' name='vecindario'><br>
+            Nombre del Empleado: <input type='text' name='nombre_empleado'><br>
+            Puesto del Empleado: <input type='text' name='puesto_empleado'><br>
+            Edad: <input type='text' name='edad'><br>
+            Género: <input type='text' name='genero'><br>
+            Productos: <input type='text' name='producto'><br>
+            Grupo de Producto: <input type='text' name='grupo_producto'><br>
+            Tipo de Producto: <input type='text' name='tipo_producto'><br>
+            Descripción del Producto: <input type='text' name='descripcion_producto'><br>
+            Unidad de Medida: <input type='text' name='unidad_medida'><br>
+            Cantidad: <input type='text' name='cantidad'><br>
+            Monto de la Línea del Artículo: <input type='text' name='monto_linea_articulo'><br>
+            Class: {{result}} <br>
+            <input type='submit' value='Predict'>
+        </form>
+    </body>
+</html>

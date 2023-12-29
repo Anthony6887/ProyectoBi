@@ -1,11 +1,11 @@
 from flask import Flask, render_template,request, flash
 import numpy as np
-import joblib
+import pickle
 
 app = Flask(__name__)
 
 # Carga del modelo entrenado
-mlpV = joblib.load('modelventas.joblib')
+model = pickle.load(open('modelventas.sav', 'rb'))
 
 
 def verificar(atributo: str):
@@ -387,8 +387,27 @@ def unidadMedidaNum(medida: str):
     return med
 
 @app.route('/')
-def index():
-    return render_template('indexV.html')
+def home():
+    result = ''
+    return render_template('indexVentas.html')
+
+@app.route('/predict', methods=['POST', 'GET'])
+def predict():
+    vecindariooNum = float(request.form['vecindario'])
+    nombreEmpleadoNum = float(request.form['nombre_empleado'])
+    puestoEmpleadoNum = float(request.form['puesto_empleado'])
+    edad  = float(request.form['edad'])
+    generoNum = float(request.form['genero'])
+    productosNum = float(request.form['producto'])
+    grupoProductoNum = float(request.form['grupo_producto'])
+    tipoProductoNum = float(request.form['tipo_producto'])
+    descripcionProductoNum = float(request.form['descripcion_producto'])
+    unidadMedidaNum = float(request.form['unidad_medida'])
+    cantidad = float(request.form['cantidad'])
+    monto_linea_articulo = float(request.form['monto_linea_articulo'])
+    
+    result = model.predict([[vecindariooNum, nombreEmpleadoNum, puestoEmpleadoNum, edad, generoNum,productosNum,grupoProductoNum, tipoProductoNum, descripcionProductoNum, unidadMedidaNum, cantidad, monto_linea_articulo]])[0]
+    return render_template('indexVentas.html', **locals())
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
