@@ -42,6 +42,9 @@
                         {{ form.monto_linea_articulo.label }} {{ form.monto_linea_articulo(size=20) }}<br>
                     </div>
                 </div>
+                <div>
+                    {{ form.submit() }}
+                </div>
                 <div class="resultado">
                     {% if result is defined %}
                         <p>Generación:</p>
@@ -61,9 +64,6 @@
                             {% endif %}
                         </div>
                     {% endif %}
-                </div>
-                <div>
-                    {{ form.submit() }}
                 </div>
             </form>
         </div>

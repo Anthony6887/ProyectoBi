@@ -459,7 +459,7 @@ class VentasForm(FlaskForm):
     cantidad = IntegerField('Cantidad', validators=[NumberRange(min=1)])
     monto_linea_articulo = FloatField('Costo total de venta', validators=[DataRequired(), NumberRange(min=0)])
 
-    submit = SubmitField('Predict')
+    submit = SubmitField('Predecir')
 
 
 

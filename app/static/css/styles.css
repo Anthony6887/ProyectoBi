@@ -59,6 +59,7 @@ input[type='submit'] {
     width: 100%;
     padding: 12px;
     margin-top: 10px;
+    margin-bottom: 20px;
     border: none;
     border-radius: 10px;
     background-color: #007bff;
