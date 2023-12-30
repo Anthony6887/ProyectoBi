@@ -1,8 +1,15 @@
+from wsgiref.validate import validator
 from flask import Flask, render_template,request, flash
 import numpy as np
 import pickle
+import tkinter as tk
+from tkinter import messagebox
+from flask_wtf import FlaskForm
+from wtforms import FloatField, StringField, IntegerField, SelectField, SubmitField
+from wtforms.validators import DataRequired, NumberRange
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'tu_clave_secreta'
 
 # Carga del modelo entrenado
 model = pickle.load(open('modelventas.sav', 'rb'))
@@ -42,143 +49,187 @@ def normalizar(max: float, min: float, valor: float):
     result = (result - min)/(max - min)
     return result
 
-def vecindariooNum(vecindario: str):
+def vecindarioNum(vecindario: str):
     if (vecindario.upper() == 'ASTORIA'):
         vecin = 1
     elif (vecindario.upper() == 'HELL\'S KITCHEN'):
         vecin = 2
     elif (vecindario.upper() == 'LOWER MANHATTAN'):
         vecin = 3
+    else:
+        vecin = 4
     return vecin
 
-def nombreEmpleadoNum(empleado: str):
-    if (empleado.upper() == 'ADRIAN MACON'):
-        empl = 1
-    elif (empleado.upper() == 'AINSLEY EVELYN'):
-        empl = 2
-    elif (empleado.upper() == 'ALINE MELANIE'):
-        empl = 3
-    elif (empleado.upper() == 'AMELA CHADWICK'):
-        empl = 4
-    elif (empleado.upper() == 'BERK DEREK'):
-        empl = 5
-    elif (empleado.upper() == 'BRITANNI JORDEN'):
-        empl = 6
-    elif (empleado.upper() == 'CALDWELL VEDA'):
-        empl = 7
-    elif (empleado.upper() == 'DAMON SASHA'):
-        empl = 8
-    elif (empleado.upper() == 'EZEKIEL RASHAD'):
-        empl = 9
-    elif (empleado.upper() == 'HAMILTON EMI'):
-        empl = 10
-    elif (empleado.upper() == 'IMA WINIFRED'):
-        empl = 11
-    elif (empleado.upper() == 'JOELLE CHRISTEN'):
-        empl = 12
-    elif (empleado.upper() == 'JOSEPH BYRON'):
-        empl = 13
-    elif (empleado.upper() == 'KELSEY CAMERON'):
-        empl = 14
-    elif (empleado.upper() == 'KYLIE CANDACE'):
-        empl = 15
-    elif (empleado.upper() == 'ORSON BENEDICT'):
-        empl = 16
-    elif (empleado.upper() == 'PANDORA NEVILLE'):
-        empl = 17
-    elif (empleado.upper() == 'PETER PALOMA'):
-        empl = 18
-    elif (empleado.upper() == 'QUAIL OCTAVIA'):
-        empl = 19
-    elif (empleado.upper() == 'REED EVE'):
-        empl = 20
-    elif (empleado.upper() == 'REMEDIOS MARI'):
-        empl = 21
-    elif (empleado.upper() == 'RONAN MAGEE'):
-        empl = 22
-    elif (empleado.upper() == 'TAMEKAH MAYA'):
-        empl = 23
-    elif (empleado.upper() == 'TATUM LAUREL'):
-        empl = 24
-    elif (empleado.upper() == 'XENA RAHIM'):
-        empl = 25
-    return empl
-
-def puestoEmpleadoNum(puesto: str):
-    if (puesto.upper() == 'BARISTA'):
-        pue = 1
-    elif (puesto.upper() == 'GERENTE DE TIENDA'):
-        pue = 2
-    return pue
-
 def generoNum(genero: str):
-    if (genero.upper() == 'F'):
+    if (genero.upper() == 'FEMENINO'):
         gen = 1
-    elif (genero.upper() == 'M'):
+    elif (genero.upper() == 'MASCULINO'):
         gen = 2
-    elif (genero.upper() == 'N'):
+    elif (genero.upper() == 'OTRO'):
         gen = 3
     return gen
 
 def productosNum(producto: str):
-    if (producto.upper() == 'ARTÍCULOS PARA EL HOGAR'):
+    if (producto.upper() == "¡NECESITO MI GRANO DE CAFÉ! CAMISETA"):
         prod = 1
-    elif (producto.upper() == 'BOLLOS'):
+    elif (producto.upper() == "¡NECESITO MI GRANO DE CAFÉ! TAZA DE CAFÉ CON LECHE"):
         prod = 2
-    elif (producto.upper() == 'CAFÉ DE FILTRO'):
+    elif (producto.upper() == "¡NECESITO MI GRANO DE CAFÉ! TAZA DE CENA"):
         prod = 3
-    elif (producto.upper() == 'CAFÉ EN GRANO GOURMET'):
+    elif (producto.upper() == "ABRIDOR DE OJOS PICANTE CHAI LG"):
         prod = 4
-    elif (producto.upper() == 'CAFÉ EN GRANO PREMIUM'):
+    elif (producto.upper() == "ABRIDOR DE OJOS PICANTE CHAI RG"):
         prod = 5
-    elif (producto.upper() == 'CAFÉ PREPARADO GOURMET'):
+    elif (producto.upper() == "AMANECER DE LA MAÑANA CHAI"):
         prod = 6
-    elif (producto.upper() == 'CAFÉ PREPARADO ORGÁNICO'):
+    elif (producto.upper() == "AMANECER DE LA MAÑANA CHAI LG"):
         prod = 7
-    elif (producto.upper() == 'CAFÉ PREPARADO PREMIUM'):
+    elif (producto.upper() == "AMANECER DE LA MAÑANA CHAI RG"):
         prod = 8
-    elif (producto.upper() == 'CAFÉ VERDE EN GRANO'):
+    elif (producto.upper() == "ASADO MEDIO COLOMBIANO"):
         prod = 9
-    elif (producto.upper() == 'CHOCOLATE CALIENTE'):
+    elif (producto.upper() == "BISCOTTI DE AVELLANA"):
         prod = 10
-    elif (producto.upper() == 'CHOCOLATE ORGÁNICO'):
+    elif (producto.upper() == "BOLLO DE ARÁNDANO"):
         prod = 11
-    elif (producto.upper() == 'CHOCOLATE PARA BEBER'):
+    elif (producto.upper() == "BOLLO DE AVENA"):
         prod = 12
-    elif (producto.upper() == 'ESPRESSO BARISTA'):
+    elif (producto.upper() == "BOLLO DE CREMA ESCOCESA"):
         prod = 13
-    elif (producto.upper() == 'GALLETAS'):
+    elif (producto.upper() == "BOLLO DE JENGIBRE"):
         prod = 14
-    elif (producto.upper() == 'GRANOS DE ESPRESO'):
+    elif (producto.upper() == "BOLLO SALADO GIGANTE"):
         prod = 15
-    elif (producto.upper() == 'GRANOS ORGÁNICOS'):
+    elif (producto.upper() == "BRASILEÑO - ORGÁNICO"):
         prod = 16
-    elif (producto.upper() == 'INFUSIÓN DE HIERBAS'):
+    elif (producto.upper() == "CAPUCHINO"):
         prod = 17
-    elif (producto.upper() == 'JARABE COMÚN'):
+    elif (producto.upper() == "CHAI DE MEZCLA TRADICIONAL"):
         prod = 18
-    elif (producto.upper() == 'JARABE SIN AZÚCAR'):
+    elif (producto.upper() == "CHAI MEZCLA TRADICIONAL LG"):
         prod = 19
-    elif (producto.upper() == 'MEZCLA DE CAFÉ EN GRANO CASERO'):
+    elif (producto.upper() == "CHAI PICANTE PARA ABRIR LOS OJOS"):
         prod = 20
-    elif (producto.upper() == 'PASTELERÍA'):
+    elif (producto.upper() == "CHAI RG DE MEZCLA TRADICIONAL"):
         prod = 21
-    elif (producto.upper() == 'ROPA'):
+    elif (producto.upper() == "CHILE MAYA"):
         prod = 22
-    elif (producto.upper() == 'TÉ CHAI'):
+    elif (producto.upper() == "CHOCOLATE AMARGO LG"):
         prod = 23
-    elif (producto.upper() == 'TÉ CHAI PREPARADO'):
+    elif (producto.upper() == "CHOCOLATE NEGRO"):
         prod = 24
-    elif (producto.upper() == 'TÉ DE HIERBAS'):
+    elif (producto.upper() == "CHOCOLATE NEGRO RG."):
         prod = 25
-    elif (producto.upper() == 'TÉ NEGRO'):
+    elif (producto.upper() == "COLOMBIANO ASADO MEDIO LG"):
         prod = 26
-    elif (producto.upper() == 'TÉ NEGRO PREPARADO'):
+    elif (producto.upper() == "COLOMBIANO ASADO MEDIO RG"):
         prod = 27
-    elif (producto.upper() == 'TÉ VERDE'):
+    elif (producto.upper() == "COLUMBIAN MEDIUM ROAST SM"):
         prod = 28
-    elif (producto.upper() == 'TÉ VERDE PREPARADO'):
+    elif (producto.upper() == "CON TROZOS DE CHOCOLATE BISCOTTI"):
         prod = 29
+    elif (producto.upper() == "CONDE GRIS"):
+        prod = 30
+    elif (producto.upper() == "CUERNO"):
+        prod = 31
+    elif (producto.upper() == "CUERNO DE ALMENDRAS"):
+        prod = 32
+    elif (producto.upper() == "CUERNO DE CHOCOLATE"):
+        prod = 33
+    elif (producto.upper() == "DESAYUNO INGLÉS"):
+        prod = 34
+    elif (producto.upper() == "DESAYUNO INGLÉS LG"):
+        prod = 35
+    elif (producto.upper() == "DESAYUNO INGLÉS RG"):
+        prod = 36
+    elif (producto.upper() == "DISPARO DE OURO BRASILEIRO"):
+        prod = 37
+    elif (producto.upper() == "EARL GREY RG"):
+        prod = 38
+    elif (producto.upper() == "ETIOPÍA"):
+        prod = 39
+    elif (producto.upper() == "ETIOPÍA LG"):
+        prod = 40
+    elif (producto.upper() == "ETIOPÍA RG"):
+        prod = 41
+    elif (producto.upper() == "ETIOPÍA SM"):
+        prod = 42
+    elif (producto.upper() == "EXPRESO TOSTADO"):
+        prod = 43
+    elif (producto.upper() == "GALLETAS DE JENGIBRE"):
+        prod = 44
+    elif (producto.upper() == "GATO SIVERIANO"):
+        prod = 45
+    elif (producto.upper() == "GUATEMALTECO CULTIVADO SOSTENIBLEMENTE"):
+        prod = 46
+    elif (producto.upper() == "HIERBA DE LIMÓN LG"):
+        prod = 47
+    elif (producto.upper() == "HIERBA DE LIMÓN RG"):
+        prod = 48
+    elif (producto.upper() == "JARABE DE AVELLANA"):
+        prod = 49
+    elif (producto.upper() == "JARABE DE CARMELO"):
+        prod = 50
+    elif (producto.upper() == "LATTÉ"):
+        prod = 51
+    elif (producto.upper() == "LATTE RG"):
+        prod = 52
+    elif (producto.upper() == "LG BRASILEÑO"):
+        prod = 53
+    elif (producto.upper() == "LG EARL GREY"):
+        prod = 54
+    elif (producto.upper() == "LG ORGÁNICO CULTIVADO DE FORMA SOSTENIBLE"):
+        prod = 55
+    elif (producto.upper() == "MENTA"):
+        prod = 56
+    elif (producto.upper() == "MENTA LG"):
+        prod = 57
+    elif (producto.upper() == "MENTA RG"):
+        prod = 58
+    elif (producto.upper() == "MEZCLA ORGÚNICA DESCAFEINADA"):
+        prod = 59
+    elif (producto.upper() == "NUESTRA MEZCLA OLD TIME DINER"):
+        prod = 60
+    elif (producto.upper() == "NUESTRA MEZCLA PARA CENAR DE ANTAÑO LG"):
+        prod = 61
+    elif (producto.upper() == "NUESTRA MEZCLA RG PARA CENAS DE ANTAÑO"):
+        prod = 62
+    elif (producto.upper() == "NUESTRO OLD TIME DINER BLEND SM"):
+        prod = 63
+    elif (producto.upper() == "ORGÁNICO CULTIVADO DE FORMA SOSTENIBLE"):
+        prod = 64
+    elif (producto.upper() == "RG BRASILEÑO"):
+            prod = 65
+    elif (producto.upper() == "RG ORGÁNICO CULTIVADO DE FORMA SOSTENIBLE"):
+        prod = 66
+    elif (producto.upper() == "RÍO CAFÉ JAMAICANO LG"):
+        prod = 67
+    elif (producto.upper() == "RÍO CAFÉ JAMAICANO RG"):
+        prod = 68
+    elif (producto.upper() == "RÍO CAFÉ JAMAICANO SM"):
+        prod = 69
+    elif (producto.upper() == "RÍO DEL CAFÉ DE JAMAICA"):
+        prod = 70
+    elif (producto.upper() == "SERENIDAD TÉ VERDE RG"):
+        prod = 71
+    elif (producto.upper() == "SIROPE DE CHOCOLATE"):
+        prod = 72
+    elif (producto.upper() == "SIROPE DE VAINILLA SIN AZÚCAR"):
+        prod = 73
+    elif (producto.upper() == "SM BRASILEÑO"):
+        prod = 74
+    elif (producto.upper() == "TÉ VERDE SERENIDAD"):
+        prod = 75
+    elif (producto.upper() == "TOSTADO PRIMO ESPRESSO"):
+        prod = 76
+    elif (producto.upper() == "TRAGO DE EXPRESO"):
+        prod = 77
+    elif (producto.upper() == "LA HIERBA DE LIMÓN"):
+        prod = 78
+    elif (producto.upper() == "SERENIDAD TÉ VERDE LG"):
+        prod = 79
+    else:
+        prod = 80
     return prod
 
 def grupoProductoNum(genero: str):
@@ -192,6 +243,8 @@ def grupoProductoNum(genero: str):
         gen = 4
     elif (genero.upper() == 'MERCANCÍA'):
         gen = 5
+    else:
+        gen = 6
     return gen
 def tipoProductoNum(tipo: str):
     if (tipo.upper() == 'ARTÍCULOS PARA EL HOGAR'):
@@ -252,6 +305,8 @@ def tipoProductoNum(tipo: str):
         tip = 28
     elif (tipo.upper() == 'TÉ VERDE PREPARADO'):
         tip = 29
+    else:
+        tip = 30
     return tip
 
 def descripcionProductoNum(descripcion: str):
@@ -357,10 +412,12 @@ def descripcionProductoNum(descripcion: str):
         desc = 50
     elif (descripcion.upper() == 'UNA TAZA HONESTA DE CAFÉ.'):
         desc = 51
+    else:
+        desc = 52
     return desc
 
 def unidadMedidaNum(medida: str):
-    if (medida.upper() == '16 0Z'):
+    if (medida.upper() == '16 OZ'):
         med = 7
     elif (medida.upper() == '24 OZ'):
         med = 8
@@ -384,30 +441,65 @@ def unidadMedidaNum(medida: str):
         med = 1
     elif (medida.upper() == '1 OZ'):
         med = 4
+    else:
+        med = 5
     return med
+
+def mostrar_alerta():
+    messagebox.showinfo("Alerta", "Este es un mensaje de alerta en Python")
+
+class VentasForm(FlaskForm):
+    vecindario = StringField('Vecindario', validators=[DataRequired()])
+    genero = SelectField('Género', choices=[('masculino', 'Masculino'), ('femenino', 'Femenino'), ('otro', 'Otro')], validators=[DataRequired()])
+    producto = StringField('Productos', validators=[DataRequired()])
+    grupo_producto = StringField('Grupo de Producto', validators=[DataRequired()])
+    tipo_producto = StringField('Tipo de Producto', validators=[DataRequired()])
+    descripcion_producto = StringField('Descripción del Producto', validators=[DataRequired()])
+    unidad_medida = StringField('Unidad de Medida', validators=[DataRequired()])
+    cantidad = IntegerField('Cantidad', validators=[NumberRange(min=1)])
+    monto_linea_articulo = FloatField('Costo total de venta', validators=[DataRequired(), NumberRange(min=0)])
+
+    submit = SubmitField('Predict')
+
+
 
 @app.route('/')
 def home():
+    VentasForm(request.form)
     result = ''
     return render_template('indexVentas.html')
 
 @app.route('/predict', methods=['POST', 'GET'])
 def predict():
-    vecindariooNum = float(request.form['vecindario'])
-    nombreEmpleadoNum = float(request.form['nombre_empleado'])
-    puestoEmpleadoNum = float(request.form['puesto_empleado'])
-    edad  = float(request.form['edad'])
-    generoNum = float(request.form['genero'])
-    productosNum = float(request.form['producto'])
-    grupoProductoNum = float(request.form['grupo_producto'])
-    tipoProductoNum = float(request.form['tipo_producto'])
-    descripcionProductoNum = float(request.form['descripcion_producto'])
-    unidadMedidaNum = float(request.form['unidad_medida'])
-    cantidad = float(request.form['cantidad'])
-    monto_linea_articulo = float(request.form['monto_linea_articulo'])
-    
-    result = model.predict([[vecindariooNum, nombreEmpleadoNum, puestoEmpleadoNum, edad, generoNum,productosNum,grupoProductoNum, tipoProductoNum, descripcionProductoNum, unidadMedidaNum, cantidad, monto_linea_articulo]])[0]
-    return render_template('indexVentas.html', **locals())
+    form = VentasForm(request.form)
+
+    if request.method == 'POST' and form.validate():
+        vecindario = form.vecindario.data
+        genero = form.genero.data
+        producto = form.producto.data
+        grupoProducto = form.grupo_producto.data
+        tipoProducto = form.tipo_producto.data
+        descripcionProducto = form.descripcion_producto.data
+        unidadMedida = form.unidad_medida.data
+        cantidad = form.cantidad.data
+        monto_linea_articulo = form.monto_linea_articulo.data
+
+        # Process the data and make predictions
+        vecindario = float(vecindarioNum(vecindario))
+        genero = float(generoNum(genero))
+        producto = float(productosNum(producto))
+        grupoProducto = float(grupoProductoNum(grupoProducto))
+        tipoProducto = float(tipoProductoNum(tipoProducto))
+        descripcionProducto = float(descripcionProductoNum(descripcionProducto))
+        unidadMedida = float(unidadMedidaNum(unidadMedida))
+        cantidad = float(cantidad)
+        monto_linea_articulo = float(monto_linea_articulo)
+
+        result = model.predict([[vecindario, genero, producto, grupoProducto, tipoProducto, descripcionProducto, unidadMedida, cantidad, monto_linea_articulo]])[0]
+        return render_template('indexVentas.html', form=form, result=result)
+
+
+    return render_template('indexVentas.html', form=form)
 
 if __name__ == '__main__':
     app.run(debug=True)

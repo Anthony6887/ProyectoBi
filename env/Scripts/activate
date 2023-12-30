@@ -35,7 +35,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="C:\Users\ANTHONY\Desktop\ProyectoBi\env"
+VIRTUAL_ENV="D:\Carpeta compartida\bi\ProyectoBi\env"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
