@@ -462,15 +462,8 @@ class VentasForm(FlaskForm):
     submit = SubmitField('Predecir')
 
 
-
-@app.route('/')
+@app.route('/', methods=['POST', 'GET'])
 def home():
-    VentasForm(request.form)
-    result = ''
-    return render_template('indexVentas.html')
-
-@app.route('/predict', methods=['POST', 'GET'])
-def predict():
     form = VentasForm(request.form)
 
     if request.method == 'POST' and form.validate():

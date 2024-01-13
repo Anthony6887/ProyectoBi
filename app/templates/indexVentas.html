@@ -11,7 +11,7 @@
             <h1>Formulario de Ventas</h1>
         </div>
         <div class="formulario">
-            <form method="POST" action="/predict">
+            <form method="POST" action="/">
                 {{ form.csrf_token }}
                 <div class="ingresos">
                     <div>
@@ -44,7 +44,9 @@
                 </div>
                 <div>
                     {{ form.submit() }}
+                    <button type="button" onclick="limpiarFormulario()">Limpiar Formulario</button>
                 </div>
+                
                 <div class="resultado">
                     {% if result is defined %}
                         <p>Generación:</p>
@@ -71,6 +73,24 @@
 
     </div>
 </body>
+<script>
+    function limpiarFormulario() {
+        // Obtener todos los elementos del formulario
+        var formElements = document.forms[0].elements;
+
+        // Iterar sobre los elementos y restablecer sus valores
+        for (var i = 0; i < formElements.length; i++) {
+            var element = formElements[i];
+            
+            // Verificar si el elemento es un campo de entrada
+            if (element.type != "submit" && element.type != "button") {
+                element.value = "";
+            }
+            
+        }
+    }
+</script>
+
 </html>
 
 
