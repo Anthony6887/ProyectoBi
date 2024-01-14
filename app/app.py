@@ -11,6 +11,9 @@ from wtforms.validators import DataRequired, NumberRange
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'tu_clave_secreta'
 
+
+
+
 # Carga del modelo entrenado
 model = pickle.load(open('modelventas.sav', 'rb'))
 
@@ -478,13 +481,24 @@ def home():
         monto_linea_articulo = form.monto_linea_articulo.data
 
         # Process the data and make predictions
-        vecindario = float(vecindarioNum(vecindario))
+        
+        #vecindario = float(vecindarioNum(vecindario))
+        #genero = float(generoNum(genero))
+        #producto = float(productosNum(producto))
+        #grupoProducto = float(grupoProductoNum(grupoProducto))
+        #tipoProducto = float(tipoProductoNum(tipoProducto))
+        #descripcionProducto = float(descripcionProductoNum(descripcionProducto))
+        #unidadMedida = float(unidadMedidaNum(unidadMedida))
+        #cantidad = float(cantidad)
+        #monto_linea_articulo = float(monto_linea_articulo)
+
+        vecindario = float(vecindario)
         genero = float(generoNum(genero))
-        producto = float(productosNum(producto))
-        grupoProducto = float(grupoProductoNum(grupoProducto))
-        tipoProducto = float(tipoProductoNum(tipoProducto))
-        descripcionProducto = float(descripcionProductoNum(descripcionProducto))
-        unidadMedida = float(unidadMedidaNum(unidadMedida))
+        producto = float(producto)
+        grupoProducto = float(grupoProducto)
+        tipoProducto = float(tipoProducto)
+        descripcionProducto = float(descripcionProducto)
+        unidadMedida = float(unidadMedida)
         cantidad = float(cantidad)
         monto_linea_articulo = float(monto_linea_articulo)
 
