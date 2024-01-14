@@ -16,7 +16,7 @@ class ModeloRedNeuronal:
         self.x_datos = self.df.drop('etiqueta', axis=1)
         self.y_datos = self.df['etiqueta']
         self.x_entrenamiento, self.x_prueba, self.y_entrenamiento, self.y_prueba = train_test_split(self.x_datos, self.y_datos, test_size=0.3)
-        self.rn_modelo = MLPClassifier(hidden_layer_sizes=(7, 5, 4), activation='relu', max_iter=10)
+        self.rn_modelo = MLPClassifier(hidden_layer_sizes=(7, 5, 5), activation='relu', solver='lbfgs', max_iter=10)
 
     def entrenar_modelo(self):
         self.rn_modelo.fit(self.x_entrenamiento, self.y_entrenamiento)

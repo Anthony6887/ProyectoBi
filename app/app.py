@@ -458,7 +458,18 @@ class VentasForm(FlaskForm):
     grupo_producto = StringField('Grupo de Producto', validators=[DataRequired()])
     tipo_producto = StringField('Tipo de Producto', validators=[DataRequired()])
     descripcion_producto = StringField('Descripción del Producto', validators=[DataRequired()])
-    unidad_medida = StringField('Unidad de Medida', validators=[DataRequired()])
+    unidad_medida = SelectField('Medida', choices=[('16 OZ', '16 OZ'),
+        ('24 OZ', '24 OZ'),
+        ('SOLO', 'SOLO'),
+        ('8 OZ', '8 OZ'),
+        ('1.5 OZ', '1.5 OZ'),
+        ('12 OZ', '12 OZ'),
+        ('3.0 OZ', '3.0 OZ'),
+        ('1 LB', '1 LB'),
+        ('0.9 OZ', '0.9 OZ'),
+        ('0.5 LB', '0.5 LB'),
+        ('1 OZ', '1 OZ')], validators=[DataRequired()])
+
     cantidad = IntegerField('Cantidad', validators=[NumberRange(min=1)])
     monto_linea_articulo = FloatField('Costo total de venta', validators=[DataRequired(), NumberRange(min=0)])
 
@@ -498,7 +509,7 @@ def home():
         grupoProducto = float(grupoProducto)
         tipoProducto = float(tipoProducto)
         descripcionProducto = float(descripcionProducto)
-        unidadMedida = float(unidadMedida)
+        unidadMedida = float(unidadMedidaNum(unidadMedida))
         cantidad = float(cantidad)
         monto_linea_articulo = float(monto_linea_articulo)
 
